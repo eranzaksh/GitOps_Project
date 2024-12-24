@@ -58,7 +58,7 @@ pipeline {
                     git commit -m "update values.yaml" || echo "No changes to commit"
 
                     # Push changes using SSH key
-                    GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin main
+                    GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin HEAD:main
                     '''
                 }
             }
