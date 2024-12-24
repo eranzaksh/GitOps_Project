@@ -1,0 +1,10 @@
+name: "web-app"
+image:
+  repository: eranzaksh/infinity
+  tag: "54-905665f8cf9907d9d29f6ae57dfbb84af48bde90"
+service:
+  type: ClusterIP
+  targetPort: 5000
+  port: 443
+spec:
+  replicaCount: 1
