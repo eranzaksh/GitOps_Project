@@ -114,7 +114,7 @@ pipeline {
     post {
         always {
             // Remove the container and delete the image so it won't take space
-            sh "docker stop ${containerId} && docker rm ${containerId} && docker rmi  ${registry}:${GIT_COMMIT}"
+            // sh "docker stop ${containerId} && docker rm ${containerId} && docker rmi  ${registry}:${GIT_COMMIT}"
 
             // cleaning the WD
             cleanWs() 
