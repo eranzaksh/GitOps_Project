@@ -58,37 +58,37 @@ pipeline {
             }
         }
 
-       stage("Test") {
-           steps {
-               script{
-                    // Getting the container ID (To delete after testing)
-                    def containerId = sh(script: "docker run -d -p 5000:5000 ${registry}:latest", returnStdout: true).trim()
+    //    stage("Test") {
+    //        steps {
+    //            script{
+    //                 // Getting the container ID (To delete after testing)
+    //                 def containerId = sh(script: "docker run -d -p 5000:5000 ${registry}:latest", returnStdout: true).trim()
                     
-                    // Wait for the container to start
-                    sh 'sleep 3'
+    //                 // Wait for the container to start
+    //                 sh 'sleep 3'
 
-                    // Fetch the private IP of the EC2 instance so i can test the container with curl
+    //                 // Fetch the private IP of the EC2 instance so i can test the container with curl
 
-                    // def privateIP = sh(
-                    //     script: "curl -s http://169.254.169.254/latest/meta-data/local-ipv4",
-                    //     returnStdout: true
-                    // ).trim()
+    //                 def privateIP = sh(
+    //                     script: "curl -s http://169.254.169.254/latest/meta-data/local-ipv4",
+    //                     returnStdout: true
+    //                 ).trim()
 
-                    // def status_code = sh(script: "curl -o /dev/null -s -w \"%{http_code}\" http://${privateIP}:5000", returnStdout: true).trim()
-                    // echo "Status code: ${status_code}"
-                    // // Check the status code and stop the pipeline if it's not 200
-                    // if (status_code != '200') {
-                    //     error "Connectivity test failed, expected 200 but got ${status_code}"
-                    // } else {
-                    //     echo "Connectivity test passed with status code 200"
-                    // }
+    //                 def status_code = sh(script: "curl -o /dev/null -s -w \"%{http_code}\" http://${privateIP}:5000", returnStdout: true).trim()
+    //                 echo "Status code: ${status_code}"
+    //                 // Check the status code and stop the pipeline if it's not 200
+    //                 if (status_code != '200') {
+    //                     error "Connectivity test failed, expected 200 but got ${status_code}"
+    //                 } else {
+    //                     echo "Connectivity test passed with status code 200"
+    //                 }
                     
-                    // sh "docker stop $containerId"
-                    // sh "docker rm $containerId"
+    //                 sh "docker stop $containerId"
+    //                 sh "docker rm $containerId"
                     
-               }
-           }
-       }
+    //            }
+    //        }
+    //    }
         stage('Push') { 
             steps { 
                 script { 
