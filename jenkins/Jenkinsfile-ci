@@ -64,7 +64,7 @@ pipeline {
                script{
                     // Getting the container ID (To delete after testing)
                     def containerId = sh(script: "docker run -d -p 5000:5000 ${registry}:latest", returnStdout: true).trim()
-                    echo "container id: ${containerId}"
+                    
                     // Wait for the container to start
                     sh 'sleep 3'
 
@@ -75,7 +75,7 @@ pipeline {
                     ).trim()
 
                     def status_code = sh(script: "curl -o /dev/null -s -w \"%{http_code}\" http://${privateIP}:5000", returnStdout: true).trim()
-                    
+                    echo "Status code: ${status_code}"
                     // Check the status code and stop the pipeline if it's not 200
                     if (status_code != '200') {
                         error "Connectivity test failed, expected 200 but got ${status_code}"
