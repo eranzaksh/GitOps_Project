@@ -39,7 +39,7 @@ pipeline {
             ]) {
                 script {
                     // Ensure the repository directory is safe
-                    sh 'git config --global --add safe.directory /home/ec2-user/workspace/project-cd'
+                    sh 'git config --global --add safe.directory /home/ec2-user/workspace/leumi-cd'
 
                     sh '''
                     git config user.name "Jenkins Bot"
@@ -57,7 +57,7 @@ pipeline {
                     git commit -m "update values.yaml" || echo "No changes to commit"
 
                     # Push changes using SSH key
-                    GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin HEAD:main
+                    GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin dev
                     '''
                 }
             }
