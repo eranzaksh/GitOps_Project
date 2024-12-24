@@ -8,5 +8,5 @@
 !*.yaml
 !requirements.txt
 !*.tf
-!Jenkinsfile
+!Jenkinsfile*
 !*.html
