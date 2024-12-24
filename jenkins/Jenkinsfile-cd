@@ -42,6 +42,7 @@ pipeline {
                     sh 'git config --global --add safe.directory /home/ec2-user/workspace/leumi-cd'
 
                     sh '''
+                    git branch
                     git config user.name "Jenkins Bot"
                     git config user.email "jenkins@example.com"
 
