@@ -70,13 +70,14 @@ pipeline {
                     ).trim()
 
                     def status_code = sh(script: "curl -o /dev/null -s -w \"%{http_code}\" http://${privateIP}:5000", returnStdout: true).trim()
-                    echo "Status code: ${status_code}"
                     // Check the status code and stop the pipeline if it's not 200
                     if (status_code != '200') {
                         error "Connectivity test failed, expected 200 but got ${status_code}"
                     } else {
                         echo "Connectivity test passed with status code 200"
                     }
+                    sh "docker stop ${containerId} && docker rm ${containerId} && docker rmi  ${registry}:${GIT_COMMIT}"
+
 
                     
                }
@@ -107,7 +108,7 @@ pipeline {
     post {
         always {
             // Remove the container and delete the image so it won't take space
-            sh "docker stop ${containerId} && docker rm ${containerId} && docker rmi  ${registry}:${GIT_COMMIT}"
+            // sh "docker stop ${containerId} && docker rm ${containerId} && docker rmi  ${registry}:${GIT_COMMIT}"
 
             // cleaning the WD
             cleanWs() 
