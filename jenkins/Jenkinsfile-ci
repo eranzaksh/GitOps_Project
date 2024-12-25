@@ -28,7 +28,7 @@ pipeline {
                 
                 stage("Linting") {
                     steps {
-                        sh '/venv/bin/pylint --disable=E0401 --output-format=parseable --fail-under=5 wapp/'
+                        sh '/venv/bin/pylint --disable=E0401 --output-format=parseable --fail-under=5 app/'
                     }
                 }
                 
