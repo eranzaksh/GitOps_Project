@@ -23,28 +23,23 @@ pipeline {
                 checkout scm
             }
         }
-        // stage("Verify") {
-        //     parallel {
+        stage("Verify") {
+            parallel {
                 
-        //         stage("Linting") {
-        //             steps {
-        //                 sh '/venv/bin/pylint --disable=E0401 --output-format=parseable --fail-under=5 wapp/'
-        //             }
-        //         }
+                stage("Linting") {
+                    steps {
+                        sh '/venv/bin/pylint --disable=E0401 --output-format=parseable --fail-under=5 wapp/'
+                    }
+                }
                 
-        //         stage("Dependencies scan") {
-        //             steps {
-        //                 sh '/venv/bin/bandit -r app/. --severity-level high'
-        //             }
-        //         }
+                stage("Dependencies scan") {
+                    steps {
+                        sh '/venv/bin/bandit -r app/. --severity-level high'
+                    }
+                }
                 
-        //         stage("dockerfile scan") {
-        //             steps {
-        //                 sh '/venv/bin/checkov -f ./dockerfile --skip-check CKV_DOCKER_2 --skip-check CKV_DOCKER_3 --framework dockerfile'
-        //             }
-        //         }
-        //     }
-        // }
+            }
+        }
 
         stage("Build") {
             steps {
