@@ -10,3 +10,4 @@
 !*.tf
 !Jenkinsfile*
 !*.html
+!*.sh
