@@ -87,7 +87,9 @@ pipeline {
             steps { 
                 script { 
                     docker.withRegistry( '', registryCredential ) { 
-                        sh 'docker push --all-tags ${registry}'
+                        // sh 'docker push --all-tags ${registry}'
+                        sh "docker push ${registry}:$GIT_COMMIT"
+                        sh "docker push ${registry}:latest"
                   }
                 }
             }
