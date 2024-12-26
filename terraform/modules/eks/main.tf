@@ -1,6 +1,6 @@
 // need to change name of cluster to leumi
-resource "aws_iam_role" "tf-eks" {
-  name = "eks-tf-argocd-prometheus"
+resource "aws_iam_role" "tf-leumi" {
+  name = "eks-tf-leumi"
 
   assume_role_policy = <<POLICY
 {
@@ -20,13 +20,13 @@ POLICY
 
 resource "aws_iam_role_policy_attachment" "tf-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.tf-eks.name
+  role       = aws_iam_role.tf-leumi.name
 }
 
 // need to change name of cluster to leumi
-resource "aws_eks_cluster" "tf-eks" {
-  name     = "tf-eks"
-  role_arn = aws_iam_role.tf-eks.arn
+resource "aws_eks_cluster" "tf-leumi" {
+  name     = "tf-leumi"
+  role_arn = aws_iam_role.tf-leumi.arn
 
   vpc_config {
     subnet_ids = var.private_subnet_ids
