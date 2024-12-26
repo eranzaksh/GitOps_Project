@@ -102,7 +102,6 @@ pipeline {
                         parameters: [
                             string(name: 'GIT_COMMIT', value: "${GIT_COMMIT}"), 
                         ]
-                    echo "Git commit: ${GIT_COMMIT}"
                 }
             }
         }
