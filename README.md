@@ -1,11 +1,11 @@
-# 🚀 GitOps Project for Bank Leumi
+# GitOps Project for Bank Leumi
 
-Welcome to the **GitOps Project**, designed to dynamically create and manage Kubernetes resources for Bank Leumi using Terraform and GitOps principles. This project ensures efficient CI/CD pipelines, monitoring, and ingress management.
+Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
+This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management.
 
 ---
 
-## 🌟 Features
-
+## Features
 This project leverages **Terraform** to provision and manage the following infrastructure:
 - **VPC**: Dynamically creates VPC with private and public subnets.
 - **Amazon EKS**: Deploys an EKS cluster with:
@@ -16,7 +16,7 @@ This project leverages **Terraform** to provision and manage the following infra
 
 ---
 
-## 📂 Repositories
+## Repositories
 
 This project is split into two repositories:
 
@@ -28,7 +28,7 @@ This project is split into two repositories:
 
 ---
 
-## 🔁 CI/CD Pipelines
+## CI/CD Pipelines
 
 ### **CI Pipeline (Triggered via Webhook)**  
 Jenkins dynamically creates an AWS agent to execute the CI pipeline when a commit is pushed to this repository.
@@ -50,8 +50,6 @@ Once triggered from the CI pipeline, the CD pipeline performs the following step
 4. **Create ArgoCD App**: Deploy or update the application using ArgoCD.
 
 ---
-
-## 📈 Monitoring and Access
 
 ### **Ingress**
 - All services, including **ArgoCD**, **Grafana**, and the **web app**, are accessible via ingress with a hostname from duckdns.
