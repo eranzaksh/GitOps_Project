@@ -1,3 +1,5 @@
+// change all names to leumi
+
 output "eks_endpoint" {
     value = aws_eks_cluster.tf-eks.endpoint
 }

@@ -1,3 +1,4 @@
+// need to change name of cluster to leumi
 resource "aws_iam_role" "tf-eks" {
   name = "eks-tf-argocd-prometheus"
 
@@ -22,6 +23,7 @@ resource "aws_iam_role_policy_attachment" "tf-AmazonEKSClusterPolicy" {
   role       = aws_iam_role.tf-eks.name
 }
 
+// need to change name of cluster to leumi
 resource "aws_eks_cluster" "tf-eks" {
   name     = "tf-eks"
   role_arn = aws_iam_role.tf-eks.arn
