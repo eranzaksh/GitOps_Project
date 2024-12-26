@@ -21,7 +21,7 @@ This project leverages **Terraform** to provision and manage the following infra
 This project is split into two repositories:
 
 1. **[GitOps_Project](https://github.com/eranzaksh/GitOps_Project.git)** (This repository)  
-   Contains the web-app and terraform modules for ease of read.
+   Contains the web-app. Also adding terraform modules and tf file for quesion number 5 for ease of read.
    
 2. **[GitOps_Project_CD](https://github.com/eranzaksh/GitOps_Project_CD.git)**  
    Manages the Continuous Deployment (CD) pipeline with ArgoCD using Helm package.
