@@ -52,7 +52,7 @@ Once triggered from the CI pipeline, the CD pipeline performs the following step
 ---
 
 ### **Ingress**
-- All services, including **ArgoCD**, **Grafana**, and the **web app**, are accessible via ingress with a hostname from duckdns.
+- All services, including **ArgoCD**, **Grafana**, and the **web app**, are accessible via ingress with a hostname from duckdns to increase security.
 
 ### **Prometheus & Grafana**
 - Prometheus monitors cluster traffic, and Grafana provides visualization dashboards.
