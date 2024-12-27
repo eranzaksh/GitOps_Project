@@ -1,4 +1,4 @@
-# GitOps Project for Bank Leumi
+# CICD pipeline Project for Bank Leumi
 
 Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
 This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management.
@@ -20,7 +20,7 @@ This project leverages **Terraform** to provision and manage the following infra
 
 This project is split into two repositories:
 
-1. **[GitOps_Project](https://github.com/eranzaksh/GitOps_Project.git)** (This repository)  
+1. **[GitOps_Project](https://github.com/eranzaksh/leumi_jenkins_project.git)** (This repository)  
    Contains the web-app. Also adding terraform modules, questions 2-4 and tf file for quesion number 5 for ease of read.
    
 2. **[GitOps_Project_CD](https://github.com/eranzaksh/GitOps_Project_CD.git)**  

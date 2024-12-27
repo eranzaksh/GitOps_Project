@@ -46,7 +46,7 @@ pipeline {
                     git config user.name "Jenkins Bot"
                     git config user.email "jenkins@example.com"
 
-                    git remote set-url origin git@github.com:eranzaksh/GitOps_Project_CD.git
+                    git remote set-url origin git@github.com:eranzaksh/leumim_jenkins_Project_CD.git
 
                     # Add GitHub's SSH key to known_hosts to prevent "Host key verification failed"
                     mkdir -p ~/.ssh
@@ -90,7 +90,7 @@ pipeline {
         steps {
             sh '''
             argocd app create leumi-app \
-            --repo https://github.com/eranzaksh/GitOps_Project_CD.git \
+            --repo https://github.com/eranzaksh/leumim_jenkins_Project_CD.git \
             --path web-app \
             --dest-namespace default \
             --dest-server https://kubernetes.default.svc \
