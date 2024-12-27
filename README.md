@@ -2,7 +2,7 @@
 
 Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
 This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management.
-
+This project also contains answers to written questions in folders "questions"
 ---
 
 ## Features
@@ -21,7 +21,7 @@ This project leverages **Terraform** to provision and manage the following infra
 This project is split into two repositories:
 
 1. **[GitOps_Project](https://github.com/eranzaksh/GitOps_Project.git)** (This repository)  
-   Contains the web-app. Also adding terraform modules and tf file for quesion number 5 for ease of read.
+   Contains the web-app. Also adding terraform modules, questions 2-4 and tf file for quesion number 5 for ease of read.
    
 2. **[GitOps_Project_CD](https://github.com/eranzaksh/GitOps_Project_CD.git)**  
    Manages the Continuous Deployment (CD) pipeline with ArgoCD using Helm package.
