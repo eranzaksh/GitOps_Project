@@ -3,6 +3,9 @@ pipeline {
     environment {
         GIT_COMMIT = ''
         ARGOCD_SERVER = 'eranargocd.duckdns.org:443'
+        DOMAIN='eranargocd'
+        TOKEN = credentials('duckdns-token') 
+        DUCKDNS_URL="https://www.duckdns.org/update?domains=${DOMAIN}&token=${TOKEN}"
     }
 
 
@@ -32,11 +35,11 @@ pipeline {
                     """
                 }
             }
-        }
+            }
     stage('git push') {
         steps {
             withCredentials([
-                sshUserPrivateKey(credentialsId: 'github-for-jobs', keyFileVariable: 'SSH_KEY', usernameVariable: 'GIT_USER')
+                sshUserPrivateKey(credentialsId: 'github-ssh', keyFileVariable: 'SSH_KEY', usernameVariable: 'GIT_USER')
             ]) {
                 script {
                     // Ensure the repository directory is safe
@@ -46,6 +49,7 @@ pipeline {
                     git config user.name "Jenkins Bot"
                     git config user.email "jenkins@example.com"
 
+                    # Set the GitHub SSH remote URL
                     git remote set-url origin git@github.com:eranzaksh/leumi_jenkins_Project_CD.git
 
                     # Add GitHub's SSH key to known_hosts to prevent "Host key verification failed"
@@ -55,18 +59,23 @@ pipeline {
                     git add .
                     git commit -m "update values.yaml" || echo "No changes"
 
+                    # Push changes using SSH key
                     GIT_SSH_COMMAND="ssh -i $SSH_KEY" git push origin HEAD:main
                     '''
                 }
             }
         }
     }
-    stage('Connect to argocd') {
+
+    stage('Configure duckdns host and Connect to argocd') {
         steps {
             withAWS(region: 'eu-north-1', credentials: 'aws-access-and-secret') {
             sh '''
             
             aws eks update-kubeconfig --name tf-leumi
+            export LbDnsName=`kubectl get svc nginx-ingress-ingress-nginx-controller -n ingress-nginx -o json | jq -r \'.status.loadBalancer.ingress[0].hostname\'`
+            export CLB_IP=`dig +short ${CLB_DNS_NAME} | head -n 1`
+            curl "$DUCKDNS_URL&ip=$CLB_IP"
 
             export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
             argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure
