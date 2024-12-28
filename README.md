@@ -1,8 +1,8 @@
 # CICD pipeline Project for Bank Leumi
 
 Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
-This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management.
-This project also contains answers to written questions in folders "questions"
+This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management for better security.
+This project also contains answers to written questions in folders named "questions"
 ---
 
 ## Features
@@ -31,7 +31,7 @@ This project is split into two repositories:
 ## CI/CD Pipelines
 
 ### **CI Pipeline (Triggered via Webhook)**  
-Jenkins dynamically creates an AWS agent to execute the CI pipeline when a commit is pushed to this repository.
+Jenkins *dynamically* creates an AWS agent to execute the CI pipeline when a commit is pushed to this repository.
 
 1. **Pull**: Clone the latest code from the repository.
 2. **Linting**: Run linting in parallel with dependency scanning.
@@ -45,7 +45,7 @@ Jenkins dynamically creates an AWS agent to execute the CI pipeline when a commi
 Once triggered from the CI pipeline, the CD pipeline performs the following steps:
 
 1. **Pull**: Clone the latest code from the repository.
-2. **Connect to ArgoCD**: Authenticate with ArgoCD.
+2. **Connect to ArgoCD and configure duckdns**: Authenticate with ArgoCD and configure hostnames.
 3. **Change Manifest**: Update the application manifest.
 4. **Create ArgoCD App**: Deploy or update the application using ArgoCD.
 
@@ -57,3 +57,18 @@ Once triggered from the CI pipeline, the CD pipeline performs the following step
 ### **Prometheus & Grafana**
 - Prometheus monitors cluster traffic, and Grafana provides visualization dashboards.
 
+### **How to use repository**
+```bash
+terraform init
+terraform apply --auto-approve
+push code to repo
+access app via: https://leumiapp.duckdns.org
+access argocd server via: https://eranargocd.duckdns.org
+access grafana server via: http://erangrafana.duckdns.org
+```
+### **Grafana configuration**
+```bash
+username: admin
+password: prom-operator
+import dashboard: 14314
+```
