@@ -95,6 +95,9 @@ pipeline {
     //     }
     // }
     stage('Create argocd app') {
+        // when {
+        //     expression { env.EXISTS == 'false' }
+        // }
         steps {
             sh '''
             argocd app create leumi-app \
