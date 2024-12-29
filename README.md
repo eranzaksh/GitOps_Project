@@ -1,10 +1,10 @@
-# CICD pipeline Project for Bank Leumi
+## CICD pipeline Project for Bank Leumi
 
 Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
 This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management for better security.
 This project also contains answers to written questions in folders named "questions"
 ---
-
+![My Example Image](Leumi-Project.svg)
 ## Features
 This project leverages **Terraform** to provision and manage the following infrastructure:
 - **VPC**: Dynamically creates VPC with private and public subnets.
