@@ -82,22 +82,22 @@ pipeline {
             }
         }
     }
-    // stage('Check if argocd app exists'){
-    //     steps {
-    //         script {
-    //             def appExists = sh(returnStatus: true, script: "argocd app get leumi-app") == 0
-    //             if (appExists) {
-    //                 env.EXISTS = 'true'
-    //             } else {
-    //                 env.EXISTS = 'false'
-    //             }
-    //         }
-    //     }
-    // }
+    stage('Check if argocd app exists'){
+        steps {
+            script {
+                def appExists = sh(returnStatus: true, script: "argocd app get leumi-app") == 0
+                if (appExists) {
+                    env.EXISTS = 'true'
+                } else {
+                    env.EXISTS = 'false'
+                }
+            }
+        }
+    }
     stage('Create argocd app') {
-        // when {
-        //     expression { env.EXISTS == 'false' }
-        // }
+        when {
+            expression { env.EXISTS == 'false' }
+        }
         steps {
             sh '''
             argocd app create leumi-app \
