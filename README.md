@@ -4,7 +4,7 @@ Designed to dynamically create and manage Kubernetes resources using Terraform a
 This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management for better security.
 This project also contains answers to written questions in folders named "questions"
 ---
-![My Example Image](Leumi-Project.svg)
+![My Example Image](Leumi-Project.png)
 ## Features
 This project leverages **Terraform** to provision and manage the following infrastructure:
 - **VPC**: Dynamically creates VPC with private and public subnets.
