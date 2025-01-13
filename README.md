@@ -1,8 +1,7 @@
-## CICD pipeline Project for Bank Leumi
+## CICD pipeline Project
 
 Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
 This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management for better security.
-This project also contains answers to written questions in folders named "questions"
 ---
 ![My Example Image](Leumi-Project.png)
 ## Features
@@ -23,7 +22,7 @@ This project is split into two repositories:
 1. **[CI_project](https://github.com/eranzaksh/CI_project.git)** (This repository)  
    Contains the web-app. Also adding terraform modules, questions 2-4 and tf file for quesion number 5 for ease of read.
    
-2. **[leumim_jenkins_Project_CD](https://github.com/eranzaksh/GitOps_Project_CD.git)**  
+2. **[CD_Project](https://github.com/eranzaksh/GitOps_Project_CD.git)**  
    Manages the Continuous Deployment (CD) pipeline with ArgoCD using Helm package.
 
 ---
