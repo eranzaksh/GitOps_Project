@@ -20,7 +20,7 @@ This project leverages **Terraform** to provision and manage the following infra
 
 This project is split into two repositories:
 
-1. **[leumi_jenkins_project](https://github.com/eranzaksh/leumi_jenkins_project.git)** (This repository)  
+1. **[CI_project](https://github.com/eranzaksh/CI_project.git)** (This repository)  
    Contains the web-app. Also adding terraform modules, questions 2-4 and tf file for quesion number 5 for ease of read.
    
 2. **[leumim_jenkins_Project_CD](https://github.com/eranzaksh/GitOps_Project_CD.git)**  
