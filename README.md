@@ -3,7 +3,7 @@
 Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
 This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management for better security.
 ---
-![My Example Image](Leumi-Project.png)
+![My Example Image](UML-Diagram.png)
 ## Features
 This project leverages **Terraform** to provision and manage the following infrastructure:
 - **VPC**: Dynamically creates VPC with private and public subnets.
@@ -61,7 +61,7 @@ Once triggered from the CI pipeline, the CD pipeline performs the following step
 terraform init
 terraform apply --auto-approve
 push code to repo
-access app via: https://leumiapp.duckdns.org
+access app via: https://eranapp.duckdns.org
 access argocd server via: https://eranargocd.duckdns.org
 access grafana server via: http://erangrafana.duckdns.org
 ```
