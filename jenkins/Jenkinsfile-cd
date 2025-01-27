@@ -3,7 +3,7 @@ pipeline {
     environment {
         GIT_COMMIT = ''
         ARGOCD_SERVER = 'eranargocd.duckdns.org:443'
-        DOMAINS="eranargocd,leumiapp,erangrafana"
+        DOMAINS="eranargocd,eranapp,erangrafana"
         TOKEN = credentials('duckdns-token') 
         DUCKDNS_URL="https://www.duckdns.org/update?domains=${DOMAINS}&token=${TOKEN}"
     }
@@ -43,14 +43,14 @@ pipeline {
             ]) {
                 script {
                     // Ensure the repository directory is safe
-                    sh 'git config --global --add safe.directory /home/ec2-user/workspace/leumi-cd'
+                    sh 'git config --global --add safe.directory /home/ec2-user/workspace/project-cd'
 
                     sh '''
                     git config user.name "Jenkins Bot"
                     git config user.email "jenkins@example.com"
 
                     # Set the GitHub SSH remote URL
-                    git remote set-url origin git@github.com:eranzaksh/leumi_jenkins_Project_CD.git
+                    git remote set-url origin git@github.com:eranzaksh/CD_Project.git
 
                     # Add GitHub's SSH key to known_hosts to prevent "Host key verification failed"
                     mkdir -p ~/.ssh
@@ -72,7 +72,7 @@ pipeline {
             withAWS(region: 'eu-north-1', credentials: 'aws-access-and-secret') {
             sh '''
             
-            aws eks update-kubeconfig --name tf-leumi
+            aws eks update-kubeconfig --name tf-eran
             export LbDnsName=`kubectl get svc -n ingress-nginx | awk -F ' ' '{print $4}' | head -n2 | tail -n1`
             export CLB_IP=`nslookup ${LbDnsName} | grep 'Address' | tail -n 1 | awk '{print $2}'`
             curl "$DUCKDNS_URL&ip=$CLB_IP"
@@ -85,7 +85,7 @@ pipeline {
     stage('Check if argocd app exists'){
         steps {
             script {
-                def appExists = sh(returnStatus: true, script: "argocd app get leumi-app") == 0
+                def appExists = sh(returnStatus: true, script: "argocd app get web-app") == 0
                 if (appExists) {
                     env.EXISTS = 'true'
                 } else {
@@ -100,8 +100,8 @@ pipeline {
         }
         steps {
             sh '''
-            argocd app create leumi-app \
-            --repo https://github.com/eranzaksh/leumi_jenkins_Project_CD.git \
+            argocd app create web-app \
+            --repo https://github.com/eranzaksh/CD_Project.git \
             --path web-app \
             --dest-namespace default \
             --dest-server https://kubernetes.default.svc \

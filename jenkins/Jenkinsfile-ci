@@ -1,7 +1,7 @@
 pipeline {
     
     environment {
-        registry = "eranzaksh/leumi" 
+        registry = "eranzaksh/project" 
         registryCredential = 'docker-hub' 
         containerId = ''
         GIT_COMMIT = ''
@@ -63,7 +63,6 @@ pipeline {
                     sh 'sleep 3'
 
                     // Fetch the private IP of the EC2 instance so i can test the container with curl
-
                     def privateIP = sh(
                         script: "curl -s http://169.254.169.254/latest/meta-data/local-ipv4",
                         returnStdout: true
@@ -94,11 +93,11 @@ pipeline {
                 }
             }
         }
-        stage('Trigger leumi-cd Job') {
+        stage('Trigger project-cd Job') {
             steps {
                 script {
                     // Trigger the second job and pass the parameters
-                    build job: 'leumi-cd', 
+                    build job: 'project-cd', 
                         parameters: [
                             string(name: 'GIT_COMMIT', value: "${GIT_COMMIT}"), 
                         ]
