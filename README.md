@@ -3,7 +3,7 @@
 Designed to dynamically create and manage Kubernetes resources using Terraform and GitOps principles. 
 This project ensures efficient CI/CD pipelines, monitoring, accessing web app with HTTPS protocol and ingress management for better security.
 ---
-![My Example Image](UML-Diagram.png)
+![My Example Image](GitOps.png)
 ## Features
 This project leverages **Terraform** to provision and manage the following infrastructure:
 - **VPC**: Dynamically creates VPC with private and public subnets.
