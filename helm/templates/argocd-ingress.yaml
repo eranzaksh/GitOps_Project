@@ -11,6 +11,10 @@ metadata:
     {{- end }}
 spec:
   ingressClassName: {{ .Values.argocd.ingress.className | default "nginx" }}
+  tls:
+  - hosts:
+    - {{ .Values.argocd.ingress.host }}
+    secretName: "{{ .Values.argocd.namespace }}-tls"
   rules:
     - host: {{ .Values.argocd.ingress.host }}
       http:

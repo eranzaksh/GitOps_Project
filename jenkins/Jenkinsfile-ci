@@ -93,6 +93,21 @@ pipeline {
                 }
             }
         }
+        stage('Configure certifiate manager and ingress for argocd') {
+            steps {
+                script {
+                    sh "helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true"
+                    sh "kubectl apply -f cluster-issuer.yaml"
+                    sh "helm upgrade --install argocd-ingress ./helm \
+                        --set service.enabled=false \
+                        --set deployment.enabled=false \
+                        --set app.ingress.enabled=false \
+                        --set argocd.ingress.enabled=true \
+                        -n argocd --create-namespace"
+                }
+            }
+        }
+
         stage('Trigger project-cd Job') {
             steps {
                 script {

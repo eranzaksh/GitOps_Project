@@ -1,13 +1,17 @@
-name: "web-app"
 image:
   repository: eranzaksh/leumi
-  tag: ""
+  tag: "370d144d329a12a8760913b651c096a03228392e"
+
 service:
+  enabled: false
   type: ClusterIP
   targetPort: 5000
   port: 443
 spec:
   replicaCount: 1
+
+deployment:
+  enabled: false
 
 argocd:
   namespace: argocd
@@ -15,3 +19,13 @@ argocd:
     enabled: true
     host: eranargocd.duckdns.org
     className: nginx
+    annotations: {cert-manager.io/cluster-issuer: "letsencrypt-prod"}
+
+app:
+  name: "web-app"
+  namespace: web-app
+  ingress:
+    enabled: false
+    host: eranapp.duckdns.org
+    className: nginx
+    annotations: {cert-manager.io/cluster-issuer: "letsencrypt-prod"}
