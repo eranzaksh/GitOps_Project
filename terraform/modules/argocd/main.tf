@@ -26,33 +26,33 @@ resource "helm_release" "argocd" {
 #     namespace = kubernetes_namespace.argocd.metadata[0].name
 #   }
 # }
-resource "kubernetes_ingress_v1" "argocd_ingress" {
-  metadata {
-    name = "argocd-ingress"
-    namespace = "argocd"
-    annotations = {
-      "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
-    }
+# resource "kubernetes_ingress_v1" "argocd_ingress" {
+#   metadata {
+#     name = "argocd-ingress"
+#     namespace = "argocd"
+#     annotations = {
+#       "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
+#     }
 
-  }
+#   }
 
-  spec {
-    ingress_class_name = "nginx"
-    rule {
-      host = "eranargocd.duckdns.org"
-      http {
-        path {
-          backend {
-            service {
-              name = "argocd-server"
-              port {
-                number = 443
-              }
-            }
-          }
-          path = "/"
-        }
-      }
-    }
-  }
-}
+#   spec {
+#     ingress_class_name = "nginx"
+#     rule {
+#       host = "eranargocd.duckdns.org"
+#       http {
+#         path {
+#           backend {
+#             service {
+#               name = "argocd-server"
+#               port {
+#                 number = 443
+#               }
+#             }
+#           }
+#           path = "/"
+#         }
+#       }
+#     }
+#   }
+# }
