@@ -8,3 +8,10 @@ service:
   port: 443
 spec:
   replicaCount: 1
+
+argocd:
+  namespace: argocd
+  ingress:
+    enabled: true
+    host: eranargocd.duckdns.org
+    className: nginx
