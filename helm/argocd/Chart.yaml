@@ -1,0 +1,5 @@
+apiVersion: v2
+description: A Helm chart for Argocd ingress in k8s
+name: argocd-ingress
+type: application
+version: 0.1.0

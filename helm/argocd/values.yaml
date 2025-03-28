@@ -1,0 +1,7 @@
+argocd:
+  namespace: argocd
+  ingress:
+    host: eranargocd.duckdns.org
+    className: nginx
+    annotations: {cert-manager.io/cluster-issuer: "letsencrypt-prod"}
+  

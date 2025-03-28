@@ -1,0 +1,28 @@
+{{- if .Values.prometheus.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.prometheus.ingress.name }}
+  namespace: {{ .Values.prometheus.namespace }}
+  annotations:
+    {{- with .Values.prometheus.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.argocd.ingress.className | default "nginx" }}
+  tls:
+  - hosts:
+    - {{ .Values.prometheus.ingress.host }}
+    secretName: "{{ .Values.prometheus.namespace }}-tls"
+  rules:
+    - host: {{ .Values.prometheus.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.prometheus.service.name }}
+                port:
+                  number: 443
+{{- end }}

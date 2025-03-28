@@ -1,0 +1,10 @@
+prometheus:
+  namespace: monitoring
+  service:
+    name: my-k8s-prom-stack-grafana
+    port: 3000
+  ingress:
+    name: prometheus-ingress
+    host: erangrafana.duckdns.org
+    className: nginx
+    annotations: {cert-manager.io/cluster-issuer: "letsencrypt-prod"}

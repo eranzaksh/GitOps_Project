@@ -41,33 +41,33 @@ resource "helm_release" "metrics_server" {
   version    = "3.10.0"  
 }
 
-resource "kubernetes_ingress_v1" "prometheus_ingress" {
-  metadata {
-    name = "prometheus-ingress"
-    namespace = "monitoring"
-    # annotations = {
-    #   "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
-    # }
+# resource "kubernetes_ingress_v1" "prometheus_ingress" {
+#   metadata {
+#     name = "prometheus-ingress"
+#     namespace = "monitoring"
+#     # annotations = {
+#     #   "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
+#     # }
 
-  }
+#   }
 
-  spec {
-    ingress_class_name = "nginx"
-    rule {
-      host = "erangrafana.duckdns.org"
-      http {
-        path {
-          backend {
-            service {
-              name = "my-k8s-prom-stack-grafana"
-              port {
-                number = 3000
-              }
-            }
-          }
-          path = "/"
-        }
-      }
-    }
-  }
-}
+#   spec {
+#     ingress_class_name = "nginx"
+#     rule {
+#       host = "erangrafana.duckdns.org"
+#       http {
+#         path {
+#           backend {
+#             service {
+#               name = "my-k8s-prom-stack-grafana"
+#               port {
+#                 number = 3000
+#               }
+#             }
+#           }
+#           path = "/"
+#         }
+#       }
+#     }
+#   }
+# }
