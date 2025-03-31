@@ -77,7 +77,7 @@ pipeline {
             export CLB_IP=`nslookup ${LbDnsName} | grep 'Address' | tail -n 1 | awk '{print $2}'`
             curl "$DUCKDNS_URL&ip=$CLB_IP"
             export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
-            argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure
+            argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD
             '''
             }
         }
@@ -103,7 +103,7 @@ pipeline {
             argocd app create web-app \
             --repo https://github.com/eranzaksh/CD_Project.git \
             --path web-app \
-            --dest-namespace default \
+            --dest-namespace web-app \
             --dest-server https://kubernetes.default.svc \
             --sync-policy automated \
             --auto-prune \
