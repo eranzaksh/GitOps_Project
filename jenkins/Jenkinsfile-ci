@@ -93,12 +93,13 @@ pipeline {
                 }
             }
         }
-        stage('Configure certifiate manager and ingress for argocd') {
+        stage('Configure certifiate manager and ingress rules') {
             steps {
                 script {
                     sh "helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true"
                     sh "kubectl apply -f cluster-issuer.yaml"
                     sh "helm upgrade --install argocd-ingress ./helm/argocd -n argocd --create-namespace"
+                    sh "helm upgrade --install prometheus-ingress ./helm/prometheus -n monitoring --create-namespace"
                 }
             }
         }
@@ -118,7 +119,7 @@ pipeline {
     }     
     post {
         always {
-            // delete the image so it won't take space
+            // delete the image so it won't take space in case the agent is up for long time or a failed test
              sh "docker rmi  ${registry}:${GIT_COMMIT}"
             // cleaning the WD
             cleanWs() 
