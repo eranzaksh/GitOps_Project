@@ -63,4 +63,9 @@ module "prometheus" {
   source = "./modules/prometheus"
   depends_on = [module.eks]
 }
+
+module "cert-manager" {
+  source = "./modules/cert_manager"
+  depends_on = [module.eks]
+}
       
