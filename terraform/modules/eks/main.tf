@@ -1,4 +1,3 @@
-// need to change name of cluster to leumi
 resource "aws_iam_role" "tf-eran" {
   name = "eks-tf-eran"
 

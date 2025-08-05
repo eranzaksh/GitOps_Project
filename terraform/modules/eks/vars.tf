@@ -9,3 +9,14 @@ variable "vpc_id" {
 variable "lb_sg_id" {
   type = string
 }
+
+variable "cluster_name" {
+  description = "Name of the EKS cluster"
+  type        = string
+  default     = "tf-eran"
+}
+
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}

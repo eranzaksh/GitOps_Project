@@ -47,6 +47,8 @@ module "eks" {
   lb_sg_id = module.security_groups.lb_sg_id
 
   private_subnet_ids = module.vpc.private_subnets
+  cluster_name       = "tf-eran"
+  aws_region         = "eu-north-1"
 }
 
 module "nginx_ingress" {
