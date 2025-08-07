@@ -41,6 +41,38 @@ resource "helm_release" "metrics_server" {
   version    = "3.10.0"  
 }
 
+# CoreDNS ServiceMonitor for Prometheus
+resource "kubernetes_manifest" "coredns_servicemonitor" {
+  manifest = {
+    apiVersion = "monitoring.coreos.com/v1"
+    kind       = "ServiceMonitor"
+    metadata = {
+      name      = "coredns"
+      namespace = "kube-system"
+      labels = {
+        "app.kubernetes.io/name" = "coredns"
+        "release"                = "my-k8s-prom-stack"
+      }
+    }
+    spec = {
+      selector = {
+        matchLabels = {
+          "k8s-app" = "kube-dns"
+        }
+      }
+      endpoints = [{
+        port     = "metrics"
+        interval = "30s"
+        path     = "/metrics"
+      }]
+    }
+  }
+
+  depends_on = [
+    helm_release.kube_prometheus_stack
+  ]
+}
+
 # resource "kubernetes_ingress_v1" "prometheus_ingress" {
 #   metadata {
 #     name = "prometheus-ingress"

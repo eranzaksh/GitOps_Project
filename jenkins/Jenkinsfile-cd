@@ -86,6 +86,23 @@ pipeline {
         }
     }
 
+    stage('Configure infrastructure components') {
+        steps {
+            withAWS(region: 'eu-north-1', credentials: 'aws-access-and-secret') {
+                sh '''
+                aws eks update-kubeconfig --name tf-eran
+                helm repo add jetstack https://charts.jetstack.io
+                helm repo add external-secrets https://charts.external-secrets.io
+                helm repo update
+                helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true
+                helm install external-secrets external-secrets/external-secrets --namespace external-secrets --create-namespace --set installCRDs=true
+                '''
+                sh "kubectl apply -f cluster-issuer.yaml"
+                sh "helm upgrade --install argocd-ingress ./helm/argocd -n argocd --create-namespace"
+                sh "helm upgrade --install prometheus-ingress ./helm/prometheus -n monitoring --create-namespace"
+            }
+        }
+    }
     stage('Configure duckdns host and Connect to argocd') {
         steps {
             withAWS(region: 'eu-north-1', credentials: 'aws-access-and-secret') {
