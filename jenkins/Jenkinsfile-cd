@@ -29,10 +29,29 @@ pipeline {
         // Here GIT_COMMIT var comes from the first job i made and is the trigger for this job
         stage("update configuration files") {
             steps {
-                script {
-                    sh """
-                    yq -i '.image.tag = "'${params.GIT_COMMIT}'"' web-app/values.yaml
-                    """
+                withAWS(region: 'eu-north-1', credentials: 'aws-access-and-secret') {
+                    script {
+                        sh """
+                        yq -i '.image.tag = "'${params.GIT_COMMIT}'"' web-app/values.yaml
+                        yq -i '.image.tag = "'${params.GIT_COMMIT}'"' backend-app/values.yaml
+                        
+                        # Get security group IDs
+                        FRONTEND_SG_ID=\$(aws ec2 describe-security-groups --filters 'Name=group-name,Values=frontend-pod-sg*' --query 'SecurityGroups[0].GroupId' --output text)
+                        BACKEND_SG_ID=\$(aws ec2 describe-security-groups --filters 'Name=group-name,Values=backend-pod-sg*' --query 'SecurityGroups[0].GroupId' --output text)
+                        
+                        # Check if frontend values has the correct SG, if not - put it there
+                        CURRENT_FRONTEND_SG=\$(yq '.securityGroup.id' web-app/values.yaml)
+                        if [ "\$CURRENT_FRONTEND_SG" != "\$FRONTEND_SG_ID" ]; then
+                            yq -i '.securityGroup.id = "'\$FRONTEND_SG_ID'"' web-app/values.yaml
+                        fi
+                        
+                        # Check if backend values has the correct SG, if not - put it there  
+                        CURRENT_BACKEND_SG=\$(yq '.securityGroup.id' backend-app/values.yaml)
+                        if [ "\$CURRENT_BACKEND_SG" != "\$BACKEND_SG_ID" ]; then
+                            yq -i '.securityGroup.id = "'\$BACKEND_SG_ID'"' backend-app/values.yaml
+                        fi
+                        """
+                    }
                 }
             }
             }
@@ -82,21 +101,21 @@ pipeline {
             }
         }
     }
-    stage('Check if argocd app exists'){
+    stage('Check if frontend argocd app exists'){
         steps {
             script {
                 def appExists = sh(returnStatus: true, script: "argocd app get web-app") == 0
                 if (appExists) {
-                    env.EXISTS = 'true'
+                    env.FRONTEND_EXISTS = 'true'
                 } else {
-                    env.EXISTS = 'false'
+                    env.FRONTEND_EXISTS = 'false'
                 }
             }
         }
     }
-    stage('Create argocd app') {
+    stage('Create frontend argocd app') {
         when {
-            expression { env.EXISTS == 'false' }
+            expression { env.FRONTEND_EXISTS == 'false' }
         }
         steps {
             sh '''
@@ -104,6 +123,35 @@ pipeline {
             --repo https://github.com/eranzaksh/CD_Project.git \
             --path web-app \
             --dest-namespace web-app \
+            --dest-server https://kubernetes.default.svc \
+            --sync-policy automated \
+            --auto-prune \
+            --sync-option CreateNamespace=true
+            '''
+        }
+    }
+    stage('Check if backend argocd app exists'){
+        steps {
+            script {
+                def backendAppExists = sh(returnStatus: true, script: "argocd app get backend-app") == 0
+                if (backendAppExists) {
+                    env.BACKEND_EXISTS = 'true'
+                } else {
+                    env.BACKEND_EXISTS = 'false'
+                }
+            }
+        }
+    }
+    stage('Create backend argocd app') {
+        when {
+            expression { env.BACKEND_EXISTS == 'false' }
+        }
+        steps {
+            sh '''
+            argocd app create backend-app \
+            --repo https://github.com/eranzaksh/CD_Project.git \
+            --path backend-app \
+            --dest-namespace backend \
             --dest-server https://kubernetes.default.svc \
             --sync-policy automated \
             --auto-prune \

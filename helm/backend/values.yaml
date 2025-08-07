@@ -1,0 +1,15 @@
+image:
+  repository: eranzaksh/backend
+  tag: "latest"
+service:
+  enabled: true
+  type: ClusterIP
+  targetPort: 5005
+  port: 80
+spec:
+  replicaCount: 1
+app:
+  name: "backend-service"
+  namespace: backend
+securityGroup:
+  id: "REPLACE_WITH_BACKEND_SG_ID"

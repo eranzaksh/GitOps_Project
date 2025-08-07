@@ -26,7 +26,7 @@ resource "helm_release" "kube_prometheus_stack" {
     value = "true"
   }
 
-    set {
+  set {
     name  = "server.service.type"
     value = "ClusterIP"
   }

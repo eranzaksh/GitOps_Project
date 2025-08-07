@@ -16,3 +16,5 @@ app:
     host: eranapp.duckdns.org
     className: nginx
     annotations: {cert-manager.io/cluster-issuer: "letsencrypt-prod"}
+securityGroup:
+  id: "REPLACE_WITH_FRONTEND_SG_ID"
