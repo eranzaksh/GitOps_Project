@@ -1,7 +1,7 @@
 pipeline {
     
     environment {
-        registry = "eranzaksh/project" 
+        registry = "eranzaksh/backend" 
         registryCredential = 'docker-hub' 
         containerId = ''
         GIT_COMMIT = ''
@@ -23,39 +23,39 @@ pipeline {
                 checkout scm
             }
         }
-        stage("Verify") {
+        stage("Backend Verify") {
             parallel {
                 
-                stage("Linting") {
+                stage("Backend Linting") {
                     steps {
-                        sh '/venv/bin/pylint --disable=E0401 --output-format=parseable --fail-under=5 app/app.py'
+                        sh '/venv/bin/pylint --disable=E0401 --output-format=parseable --fail-under=5 backend/app.py'
                     }
                 }
                 
-                stage("Dependencies scan") {
+                stage("Backend Dependencies scan") {
                     steps {
-                        sh '/venv/bin/bandit -r app/. --severity-level high'
+                        sh '/venv/bin/bandit -r backend/. --severity-level high'
                     }
                 }
                 
             }
         }
 
-        stage("Build") {
+        stage("Build Backend") {
             steps {
                 script {
+                    sh "git config --global --add safe.directory '*'"
                     GIT_COMMIT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-                    sh 'docker build -t ${registry}:${GIT_COMMIT} -t ${registry}:latest .'
-
+                    sh 'docker build -f backend/dockerfile -t ${registry}:${GIT_COMMIT} -t ${registry}:latest ./backend'
                 }
             }
         }
 
-       stage("Test") {
+       stage("Test Backend") {
            steps {
                script{
                     // Getting the container ID (To delete after testing)
-                    def containerId = sh(script: "docker run -d -p 5000:5000 ${registry}:latest", returnStdout: true).trim()
+                    def containerId = sh(script: "docker run -d -p 5005:5005 ${registry}:latest", returnStdout: true).trim()
                     
                     // Wait for the container to start
                     sh 'sleep 3'
@@ -66,25 +66,23 @@ pipeline {
                         returnStdout: true
                     ).trim()
 
-                    def status_code = sh(script: "curl -o /dev/null -s -w \"%{http_code}\" http://${privateIP}:5000", returnStdout: true).trim()
+                    def status_code = sh(script: "curl -o /dev/null -s -w \"%{http_code}\" http://${privateIP}:5005", returnStdout: true).trim()
                     // Check the status code and stop the pipeline if it's not 200
                     if (status_code != '200') {
-                        error "Connectivity test failed, expected 200 but got ${status_code}"
+                        error "Backend connectivity test failed, expected 200 but got ${status_code}"
                     } else {
-                        echo "Connectivity test passed with status code 200"
+                        echo "Backend connectivity test passed with status code 200"
                     }
                     sh "docker stop ${containerId} && docker rm ${containerId}"
-
 
                     
                }
            }
        }
-        stage('Push') { 
+        stage('Push Backend') { 
             steps { 
                 script { 
                     docker.withRegistry( '', registryCredential ) { 
-                        // sh 'docker push --all-tags ${registry}'
                         sh "docker push ${registry}:$GIT_COMMIT"
                         sh "docker push ${registry}:latest"
                   }
@@ -112,11 +110,11 @@ pipeline {
             cleanWs() 
          }
         success {
-          slackSend channel: 'succeeded-build', color: 'good', message: "Build successful: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
+          slackSend channel: 'succeeded-build', color: 'good', message: "Backend build successful: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
         }
     
         failure {
-          slackSend channel: 'devops-alerts', color: 'danger', message: "Build failed: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
+          slackSend channel: 'devops-alerts', color: 'danger', message: "Backend build failed: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
         }
 
 }

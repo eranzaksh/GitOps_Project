@@ -98,6 +98,7 @@ pipeline {
                 helm install external-secrets external-secrets/external-secrets --namespace external-secrets --create-namespace --set installCRDs=true
                 '''
                 sh "kubectl apply -f cluster-issuer.yaml"
+                sh "kubectl apply -f cluster-autoscaler.yaml"
                 sh "helm upgrade --install argocd-ingress ./helm/argocd -n argocd --create-namespace"
                 sh "helm upgrade --install prometheus-ingress ./helm/prometheus -n monitoring --create-namespace"
             }
