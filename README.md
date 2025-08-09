@@ -89,59 +89,56 @@ This project demonstrates a complete GitOps workflow for deploying a microservic
 ## 🔄 CI/CD Pipelines
 
 ### Frontend CI Pipeline (`jenkins/Jenkinsfile-ci-frontend`)
-```yaml
-Stages:
-1. Clone Repository
-2. Verify (Parallel):
+
+**Pipeline Stages:**
+1. **Clone Repository**
+2. **Verify (Parallel)**:
    - Frontend Linting (Pylint)
    - Frontend Security Scan (Bandit)
    - Backend Linting (Pylint)
    - Backend Security Scan (Bandit)
-3. Build (Parallel):
+3. **Build (Parallel)**:
    - Build Frontend Docker Image
    - Build Backend Docker Image
-4. Test:
+4. **Test**:
    - Container Health Check
    - Connectivity Testing
-5. Push:
+5. **Push**:
    - Push Images to Docker Hub
-6. Trigger CD Pipeline
-```
+6. **Trigger CD Pipeline**
 
 ### Backend CI Pipeline (`jenkins/Jenkinsfile-ci-backend`)
-```yaml
-Stages:
-1. Clone Repository
-2. Backend Verify (Parallel):
+
+**Pipeline Stages:**
+1. **Clone Repository**
+2. **Backend Verify (Parallel)**:
    - Backend Linting (Pylint)
    - Backend Security Scan (Bandit)
-3. Build Backend
-4. Test Backend:
+3. **Build Backend**
+4. **Test Backend**:
    - Container Health Check
    - API Connectivity Testing
-5. Push Backend Image
-6. Trigger CD Pipeline
-```
+5. **Push Backend Image**
+6. **Trigger CD Pipeline**
 
 ### CD Pipeline (`jenkins/Jenkinsfile-cd`)
-```yaml
-Stages:
-1. Clone Git Repository
-2. Update Configuration Files:
+
+**Pipeline Stages:**
+1. **Clone Git Repository**
+2. **Update Configuration Files**:
    - Update image tags in Helm values
    - Update security group IDs dynamically from AWS
-3. Git Push Changes
-4. Configure Infrastructure Components:
+3. **Git Push Changes**
+4. **Configure Infrastructure Components**:
    - Install Cert-Manager
    - Install External Secrets
    - Apply Cluster Issuer
    - Deploy ArgoCD and Prometheus
-   - NOTE: Cluster Autoscaler now deployed via Terraform (infrastructure layer)
-5. Configure DuckDNS Host
-6. Create ArgoCD Applications:
+   - *Note: Cluster Autoscaler is deployed via Terraform (infrastructure layer)*
+5. **Configure DuckDNS Host**
+6. **Create ArgoCD Applications**:
    - Frontend Application
    - Backend Application
-```
 
 ## 🎯 GitOps Principles
 
@@ -178,19 +175,33 @@ Stages:
 ## 🚀 Getting Started
 
 ### Prerequisites
-- AWS CLI configured
-- Terraform installed
-- kubectl installed
-- Jenkins server with required plugins
-- Docker Hub account
-- GitHub repository
+
+#### Required Software
+- **AWS CLI** (v2.x): Configured with appropriate credentials
+- **Terraform** (v1.5+): Infrastructure as Code tool
+- **kubectl** (v1.28+): Kubernetes command-line tool
+- **Docker** (v20.x+): Container runtime
+- **Helm** (v3.x+): Kubernetes package manager
+
+#### Required Accounts & Services
+- **AWS Account**: With appropriate IAM permissions
+- **Docker Hub Account**: For container registry
+- **GitHub Account**: For source code repository
+- **GCP Account** (optional): For External Secrets Manager integration
+- **DuckDNS Account**: For dynamic DNS
+
+#### Infrastructure Requirements
+- **Jenkins Server**: With required plugins (Docker, AWS, Kubernetes, Git)
+- **Estimated AWS Costs**: $50-100/month for development environment
+- **Deployment Time**: Initial deployment takes approximately 20-30 minutes
 
 ### Quick Start
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/your-username/GitOps_Project.git
    cd GitOps_Project
    ```
+   > **Note**: Replace `your-username` with your actual GitHub username
 
 2. **Deploy Infrastructure**
    ```bash
@@ -240,11 +251,16 @@ Stages:
 After infrastructure deployment, developers get access to:
 
 ```bash
-# Configure kubectl access
-aws eks update-kubeconfig --region <aws.region> --name <eks.cluster.name>
+# Configure kubectl access (replace values from Terraform outputs)
+aws eks update-kubeconfig --region us-east-1 --name gitops-eks-cluster
 
 # Get ArgoCD admin password
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+
+# Get Terraform outputs for security groups
+cd terraform
+terraform output frontend_pod_sg_id
+terraform output backend_pod_sg_id
 
 # Useful cluster management commands
 kubectl get nodes                    # Check cluster nodes
@@ -252,9 +268,9 @@ kubectl get pods --all-namespaces   # Check all pods
 kubectl get ingress --all-namespaces # Check ingress resources
 kubectl get svc --all-namespaces    # Check services
 
-# Security Group IDs for application configuration
-Frontend Security Group: ${frontend_pod_sg_id}
-Backend Security Group: ${backend_pod_sg_id}
+# Monitor deployment status
+kubectl get applications -n argocd   # Check ArgoCD applications
+kubectl logs -f deployment/frontend -n default  # Follow frontend logs
 ```
 
 ### Key Features
