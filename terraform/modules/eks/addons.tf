@@ -1,6 +1,6 @@
 # CoreDNS Add-on
 resource "aws_eks_addon" "coredns" {
-  cluster_name                = aws_eks_cluster.tf-eran.name
+  cluster_name                = var.cluster_name
   addon_name                  = "coredns"
   addon_version               = var.coredns_addon_version
   resolve_conflicts_on_create = "OVERWRITE"
@@ -18,7 +18,7 @@ resource "aws_eks_addon" "coredns" {
 
 # VPC CNI Add-on
 resource "aws_eks_addon" "vpc_cni" {
-  cluster_name                = aws_eks_cluster.tf-eran.name
+  cluster_name                = var.cluster_name
   addon_name                  = "vpc-cni"
   addon_version               = var.vpc_cni_addon_version
   resolve_conflicts_on_create = "OVERWRITE"

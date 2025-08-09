@@ -22,9 +22,8 @@ resource "aws_iam_role_policy_attachment" "tf-AmazonEKSClusterPolicy" {
   role       = aws_iam_role.tf-eran.name
 }
 
-// need to change name of cluster to eran
 resource "aws_eks_cluster" "tf-eran" {
-  name     = "tf-eran"
+  name     = var.cluster_name
   role_arn = aws_iam_role.tf-eran.arn
 
   vpc_config {

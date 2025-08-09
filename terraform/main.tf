@@ -12,7 +12,7 @@ provider "aws" {
   region = "eu-north-1"
   # profile = "eran"
 }
-
+# give tf temp token
 data "aws_eks_cluster_auth" "cluster_token" {
   name = module.eks.cluster_name
 }
@@ -48,8 +48,8 @@ module "eks" {
   lb_sg_id = module.security_groups.lb_sg_id
 
   private_subnet_ids = module.vpc.private_subnets
-  cluster_name       = "tf-eran"
-  aws_region         = "eu-north-1"
+  cluster_name       = var.eks_cluster_name
+  aws_region         = var.aws_region
 }
 
 module "nginx_ingress" {

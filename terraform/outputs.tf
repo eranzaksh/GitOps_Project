@@ -11,7 +11,7 @@ output "backend_pod_sg_id" {
 # kubectl Configuration
 output "kubectl_config_command" {
   description = "Run this command to configure kubectl"
-  value       = "aws eks update-kubeconfig --region eu-north-1 --name ${module.eks.cluster_name}"
+  value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${module.eks.cluster_name}"
 }
 
 # ArgoCD Admin Password
@@ -36,7 +36,7 @@ output "cluster_info" {
   description = "EKS cluster information"
   value = {
     cluster_name = module.eks.cluster_name
-    region       = "eu-north-1"
+    region       = var.aws_region
     endpoint     = module.eks.eks_endpoint
   }
 }

@@ -23,7 +23,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage("Verify") {
+        stage("Frontend Verify") {
             parallel {
                 
                 stage("Frontend Linting") {
@@ -38,43 +38,19 @@ pipeline {
                     }
                 }
                 
-                stage("Backend Linting") {
-                    steps {
-                        sh '/venv/bin/pylint --disable=E0401 --output-format=parseable --fail-under=5 backend/app.py'
-                    }
-                }
-                
-                stage("Backend Dependencies scan") {
-                    steps {
-                        sh '/venv/bin/bandit -r backend/. --severity-level high'
-                    }
-                }
-                
             }
         }
 
-        stage("Build") {
-            parallel {
-                stage("Build Frontend") {
-                    steps {
-                        script {
-                            sh "git config --global --add safe.directory '*'"
-                            GIT_COMMIT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
-                            sh 'docker build -f app/dockerfile -t ${registry}-frontend:${GIT_COMMIT} -t ${registry}-frontend:latest ./app'
-                        }
-                    }
-                }
-                stage("Build Backend") {
-                    steps {
-                        script {
-                            sh 'docker build -f backend/dockerfile -t ${registry}-backend:${GIT_COMMIT} -t ${registry}-backend:latest ./backend'
-                        }
-                    }
+        stage("Build Frontend") {
+            steps {
+                script {
+                    GIT_COMMIT = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
+                    sh 'docker build -f app/dockerfile -t ${registry}:${GIT_COMMIT} -t ${registry}:latest ./app'
                 }
             }
         }
 
-       stage("Test") {
+       stage("Test Frontend") {
            steps {
                script{
                     // Getting the container ID (To delete after testing)
@@ -92,22 +68,19 @@ pipeline {
                     def status_code = sh(script: "curl -o /dev/null -s -w \"%{http_code}\" http://${privateIP}:5000", returnStdout: true).trim()
                     // Check the status code and stop the pipeline if it's not 200
                     if (status_code != '200') {
-                        error "Connectivity test failed, expected 200 but got ${status_code}"
+                        error "Frontend connectivity test failed, expected 200 but got ${status_code}"
                     } else {
-                        echo "Connectivity test passed with status code 200"
+                        echo "Frontend connectivity test passed with status code 200"
                     }
                     sh "docker stop ${containerId} && docker rm ${containerId}"
-
-
                     
                }
            }
        }
-        stage('Push') { 
+        stage('Push Frontend') { 
             steps { 
                 script { 
                     docker.withRegistry( '', registryCredential ) { 
-                        // sh 'docker push --all-tags ${registry}'
                         sh "docker push ${registry}:$GIT_COMMIT"
                         sh "docker push ${registry}:latest"
                   }
@@ -135,11 +108,11 @@ pipeline {
             cleanWs() 
          }
         success {
-          slackSend channel: 'succeeded-build', color: 'good', message: "Build successful: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
+          slackSend channel: 'succeeded-build', color: 'good', message: "Frontend build successful: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
         }
     
         failure {
-          slackSend channel: 'devops-alerts', color: 'danger', message: "Build failed: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
+          slackSend channel: 'devops-alerts', color: 'danger', message: "Frontend build failed: Job '${env.JOB_NAME}-${env.BUILD_NUMBER} ${STAGE_NAME} ${GIT_COMMIT}'"
         }
 
 }
