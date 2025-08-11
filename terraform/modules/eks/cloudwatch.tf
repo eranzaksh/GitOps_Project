@@ -5,7 +5,7 @@ resource "kubernetes_namespace" "amazon_cloudwatch" {
 
   depends_on = [aws_eks_cluster.tf-eran]
 }
-
+# to see cloudwatch metrics in grafana need to use built in aws data source
 resource "helm_release" "aws_cloudwatch_metrics" {
   name       = "aws-cloudwatch-metrics"
   repository = "https://aws.github.io/eks-charts"
