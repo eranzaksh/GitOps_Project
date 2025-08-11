@@ -15,7 +15,7 @@ resource "helm_release" "kube_prometheus_stack" {
   depends_on = [
     kubernetes_namespace.monitoring
   ]
-
+  # Not using default helm values
   set {
     name  = "prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues"
     value = "false"
@@ -73,33 +73,3 @@ resource "kubernetes_manifest" "coredns_servicemonitor" {
   ]
 }
 
-# resource "kubernetes_ingress_v1" "prometheus_ingress" {
-#   metadata {
-#     name = "prometheus-ingress"
-#     namespace = "monitoring"
-#     # annotations = {
-#     #   "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
-#     # }
-
-#   }
-
-#   spec {
-#     ingress_class_name = "nginx"
-#     rule {
-#       host = "erangrafana.duckdns.org"
-#       http {
-#         path {
-#           backend {
-#             service {
-#               name = "my-k8s-prom-stack-grafana"
-#               port {
-#                 number = 3000
-#               }
-#             }
-#           }
-#           path = "/"
-#         }
-#       }
-#     }
-#   }
-# }

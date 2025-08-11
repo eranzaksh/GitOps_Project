@@ -1,13 +1,4 @@
 
-# This policy grants the cluster autoscaler the minimum required permissions
-# to discover and scale Auto Scaling Groups (ASGs) associated with the EKS cluster.
-# 
-# Why Resource = "*" is required:
-# - ASGs are created dynamically by EKS with unpredictable names/IDs
-# - The autoscaler needs to scan ALL ASGs to find ones tagged for this cluster
-# - Instance IDs are generated dynamically when scaling occurs
-# - Security is maintained through cluster-specific tags on ASGs
-# ========================================
 
 resource "aws_iam_policy" "autoscaler_policy" {
   name        = "eks-autoscaler-policy"
@@ -32,9 +23,7 @@ resource "aws_iam_policy" "autoscaler_policy" {
         ]
         # Resource = "*" is necessary because:
         # 1. ASG names contain random suffixes (e.g., eks-private-nodes-abc123def)
-        # 2. Instance IDs are unpredictable and change during scaling
-        # 3. The autoscaler discovers ASGs by scanning for cluster tags
-        # 4. This is the standard pattern recommended by AWS EKS documentation
+
         Resource = "*"
       }
     ]
